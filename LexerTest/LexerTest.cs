@@ -2,7 +2,7 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTestProject
+namespace LexerTest
 {
     [TestClass]
     public class LexerTest

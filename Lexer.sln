@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lexer", "Lexer\Lexer.csproj", "{0CE9A377-AA4E-4013-8CD8-70880ABEDFB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject1\UnitTestProject.csproj", "{DE2279C3-2966-433B-823E-4BD852FF31E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexerTest", "LexerTest\LexerTest.csproj", "{DE2279C3-2966-433B-823E-4BD852FF31E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
