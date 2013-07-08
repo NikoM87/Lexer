@@ -17,15 +17,11 @@ namespace Lexer
             NextChar();
         }
 
-        private const int Max_Length_Of_Lexem = 16;
-
-        private StringBuilder lexem = new StringBuilder( Max_Length_Of_Lexem );
+        private StringBuilder lexem = new StringBuilder();
             
-
         private void NextChar()
         {
             _nextCh = (char) _reader.Read();
-
         }
 
         private readonly StreamReader _reader;
@@ -42,7 +38,6 @@ namespace Lexer
         {
             BaseStream = new MemoryStream();
             _reader = new StreamReader( BaseStream );
-
         }
 
         public string Next()
@@ -53,35 +48,30 @@ namespace Lexer
 
             if ( IsIntNumber() )
             {
-                return ReadIntNumber();
+                ReadIntNumber();
             }
-
-            if ( IsIdentificator() )
+            else if ( IsIdentificator() )
             {
-                return ReadIdentificator();
+                ReadIdentificator();
             }
-
-            if ( IsRelationalOperator() )
+            else if ( IsRelationalOperator() )
             {
-                return ReadRelationalOperator();
+                ReadRelationalOperator();
             }
-
-            if ( IsOperation() )
+            else if ( IsMathOperation() )
             {
-                return ReadOperation();
+                ReadOperation();
             }
-
-            if ( IsColon() )
+            else if ( IsColon() )
             {
-                return ReadColonOrAssign();
+                ReadColonOrAssign();
             }
-
-            if ( IsStringConstant() )
+            else if ( IsSingleQuote() )
             {
-                return ReadStringConstant();
+                ReadStringConstant();
             }
 
-            return string.Empty;
+            return lexem.ToString();
         }
 
         private void SupplementLexeme()
@@ -90,33 +80,28 @@ namespace Lexer
             NextChar();
         }
 
-        private string ReadStringConstant()
+        private void ReadStringConstant()
         {
             SupplementLexeme();
-            while ( _nextCh != '\'' )
+            while ( !IsSingleQuote() )
             {
                SupplementLexeme();
             }
             SupplementLexeme();
-
-            return lexem.ToString();
         }
 
-        private bool IsStringConstant()
+        private bool IsSingleQuote()
         {
             return _nextCh == '\'';
         }
 
-        private string ReadColonOrAssign()
+        private void ReadColonOrAssign()
         {
             SupplementLexeme();
-
             if ( _nextCh == '=' )
             {
                 SupplementLexeme();
             }
-
-            return lexem.ToString();
         }
 
         private bool IsColon()
@@ -124,14 +109,13 @@ namespace Lexer
             return _nextCh == ':';
         }
 
-        private string ReadRelationalOperator()
+        private void ReadRelationalOperator()
         {
             SupplementLexeme();
             if ( _nextCh == '>' || _nextCh == '=' )
             {
                 SupplementLexeme();
             }
-            return lexem.ToString();
         }
 
         private bool IsRelationalOperator()
@@ -147,24 +131,22 @@ namespace Lexer
             }
         }
 
-        private string ReadOperation()
+        private void ReadOperation()
         {
             SupplementLexeme();
-            return lexem.ToString();
         }
 
-        private bool IsOperation()
+        private bool IsMathOperation()
         {
             return _nextCh == '+' || _nextCh == '-' || _nextCh == '*' || _nextCh == '/';
         }
 
-        private string ReadIdentificator()
+        private void ReadIdentificator()
         {
             while ( _nextCh == '_' || char.IsLetterOrDigit( _nextCh ) )
             {
                 SupplementLexeme();
             }
-            return lexem.ToString();
         }
 
         private bool IsIdentificator()
@@ -172,13 +154,12 @@ namespace Lexer
             return _nextCh == '_' || char.IsLetter( _nextCh );
         }
 
-        private string ReadIntNumber(  )
+        private void ReadIntNumber(  )
         {
-            while ( char.IsNumber( _nextCh ) )
+            while ( IsIntNumber() )
             {
                 SupplementLexeme();
             }
-            return lexem.ToString();
         }
 
         private bool IsIntNumber()
