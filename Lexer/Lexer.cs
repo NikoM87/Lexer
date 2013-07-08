@@ -18,6 +18,9 @@ namespace Lexer
             NextChar();
         }
 
+        private StringBuilder lexem = new StringBuilder();
+            
+
         private void NextChar()
         {
             _nextCh = (char) _reader.Read();
@@ -55,12 +58,86 @@ namespace Lexer
                 return ReadIdentificator();
             }
 
+            if ( IsRelationalOperator() )
+            {
+                return ReadRelationalOperator();
+            }
+
             if ( IsOperation() )
             {
                 return ReadOperation();
             }
 
+            if ( IsColon() )
+            {
+                return ReadColonOrAssign();
+            }
+
+            if ( IsStringConstant() )
+            {
+                return ReadStringConstant();
+            }
+
             return "";
+        }
+
+        private string ReadStringConstant()
+        {
+            lexem.Clear();
+            lexem.Append( _nextCh );
+            NextChar();
+            while ( _nextCh != '\'' )
+            {
+                lexem.Append( _nextCh );
+                NextChar();
+            }
+            lexem.Append( _nextCh );
+            NextChar();
+
+            return lexem.ToString();
+        }
+
+        private bool IsStringConstant()
+        {
+            return _nextCh == '\'';
+        }
+
+        private string ReadColonOrAssign()
+        {
+            lexem.Clear();
+            lexem.Append( _nextCh );
+            NextChar();
+
+            if ( _nextCh == '=' )
+            {
+                lexem.Append( _nextCh );
+                NextChar();
+            }
+
+            return lexem.ToString();
+        }
+
+        private bool IsColon()
+        {
+            return _nextCh == ':';
+        }
+
+        private string ReadRelationalOperator()
+        {
+            lexem.Clear();
+            lexem.Append( _nextCh );
+            NextChar();
+            if ( _nextCh == '>' || _nextCh == '=' )
+            {
+                lexem.Append( _nextCh );
+                NextChar();
+            }
+            return lexem.ToString();
+        }
+
+        private bool IsRelationalOperator()
+        {
+            return  _nextCh == '='   || _nextCh == '>' || _nextCh == '<';
         }
 
         private void SkipWhitespace()
@@ -73,10 +150,10 @@ namespace Lexer
 
         private string ReadOperation()
         {
-            var s = "";
-            s += _nextCh;
+            lexem.Clear();
+            lexem.Append( _nextCh );
             NextChar();
-            return s;
+            return lexem.ToString();
         }
 
         private bool IsOperation()
@@ -86,13 +163,13 @@ namespace Lexer
 
         private string ReadIdentificator()
         {
-            var s = "";
+            lexem.Clear();
             while ( _nextCh == '_' || char.IsLetterOrDigit( _nextCh ) )
             {
-                s += _nextCh;
+                lexem.Append( _nextCh );
                 NextChar();
             }
-            return s;
+            return lexem.ToString();
         }
 
         private bool IsIdentificator()
@@ -102,13 +179,13 @@ namespace Lexer
 
         private string ReadIntNumber(  )
         {
-            var s = "";
+            lexem.Clear();
             while ( char.IsNumber( _nextCh ) )
             {
-                s += _nextCh;
+                lexem.Append( _nextCh );
                 NextChar();
             }
-            return s;
+            return lexem.ToString();
         }
 
         private bool IsIntNumber()

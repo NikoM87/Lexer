@@ -56,20 +56,51 @@ namespace LexerTest
         }
 
         [TestMethod]
-        public void TestSemicolon()
+        public void TestOperation()
         {
-            _lex.LoadTextCode( "18+2 - 3*4/ 5" );
+            _lex.LoadTextCode( " + - * / " );
 
-            Assert.AreEqual( "18", _lex.Next() );
             Assert.AreEqual( "+", _lex.Next() );
-            Assert.AreEqual( "2", _lex.Next() );
             Assert.AreEqual( "-", _lex.Next() );
-            Assert.AreEqual( "3", _lex.Next() );
             Assert.AreEqual( "*", _lex.Next() );
-            Assert.AreEqual( "4", _lex.Next() );
             Assert.AreEqual( "/", _lex.Next() );
-            Assert.AreEqual( "5", _lex.Next() );
         }
+
+
+        [TestMethod]
+        public void TestRelationalOperator()
+        {
+            _lex.LoadTextCode( " = <> > >= < <= " );
+
+            Assert.AreEqual( "=", _lex.Next() );
+            Assert.AreEqual( "<>", _lex.Next() );
+            Assert.AreEqual( ">", _lex.Next() );
+            Assert.AreEqual( ">=", _lex.Next() );
+            Assert.AreEqual( "<", _lex.Next() );
+            Assert.AreEqual( "<=", _lex.Next() );
+        }
+
+
+        [TestMethod]
+        public void TestColonAndAssign()
+        {
+            _lex.LoadTextCode( " : := : :=" );
+
+            Assert.AreEqual( ":", _lex.Next() );
+            Assert.AreEqual( ":=", _lex.Next() );
+            Assert.AreEqual( ":", _lex.Next() );
+            Assert.AreEqual( ":=", _lex.Next() );
+        }
+
+
+        [TestMethod]
+        public void TestStringConstant()
+        {
+            _lex.LoadTextCode( " 'Hello, Wordld!' " );
+
+            Assert.AreEqual( "'Hello, Wordld!'", _lex.Next() );
+        }
+
 
         [TestMethod]
         public void TestEmpty()
