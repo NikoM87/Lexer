@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Text;
 
+using Lexer;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LexerTest
@@ -32,9 +34,9 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "\t Program" );
 
-            string word = _lex.NextLexeme();
+            Token word = _lex.NextToken();
 
-            Assert.AreEqual( "Program", word );
+            Assert.AreEqual( "Program", word.Name);
         }
 
 
@@ -43,11 +45,11 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "Program HelloWorld" );
 
-            string word1 = _lex.NextLexeme();
-            string word2 = _lex.NextLexeme();
+            Token word1 = _lex.NextToken();
+            Token word2 = _lex.NextToken();
 
-            Assert.AreEqual( "Program", word1 );
-            Assert.AreEqual( "HelloWorld", word2 );
+            Assert.AreEqual( "Program", word1.Name );
+            Assert.AreEqual( "HelloWorld", word2.Name );
         }
 
 
@@ -56,9 +58,9 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "__az_AZ09" );
 
-            string word = _lex.NextLexeme();
+            Token word = _lex.NextToken();
 
-            Assert.AreEqual( "__az_AZ09", word );
+            Assert.AreEqual( "__az_AZ09", word.Name );
         }
 
 
@@ -67,10 +69,10 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " + - * / " );
 
-            Assert.AreEqual( "+", _lex.NextLexeme() );
-            Assert.AreEqual( "-", _lex.NextLexeme() );
-            Assert.AreEqual( "*", _lex.NextLexeme() );
-            Assert.AreEqual( "/", _lex.NextLexeme() );
+            Assert.AreEqual( "+", _lex.NextToken().Name );
+            Assert.AreEqual( "-", _lex.NextToken().Name );
+            Assert.AreEqual( "*", _lex.NextToken().Name );
+            Assert.AreEqual( "/", _lex.NextToken().Name );
         }
 
 
@@ -79,12 +81,12 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " = <> > >= < <= " );
 
-            Assert.AreEqual( "=", _lex.NextLexeme() );
-            Assert.AreEqual( "<>", _lex.NextLexeme() );
-            Assert.AreEqual( ">", _lex.NextLexeme() );
-            Assert.AreEqual( ">=", _lex.NextLexeme() );
-            Assert.AreEqual( "<", _lex.NextLexeme() );
-            Assert.AreEqual( "<=", _lex.NextLexeme() );
+            Assert.AreEqual( "=", _lex.NextToken().Name );
+            Assert.AreEqual( "<>", _lex.NextToken().Name );
+            Assert.AreEqual( ">", _lex.NextToken().Name );
+            Assert.AreEqual( ">=", _lex.NextToken().Name );
+            Assert.AreEqual( "<", _lex.NextToken().Name );
+            Assert.AreEqual( "<=", _lex.NextToken().Name );
         }
 
 
@@ -93,10 +95,10 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " : := : :=" );
 
-            Assert.AreEqual( ":", _lex.NextLexeme() );
-            Assert.AreEqual( ":=", _lex.NextLexeme() );
-            Assert.AreEqual( ":", _lex.NextLexeme() );
-            Assert.AreEqual( ":=", _lex.NextLexeme() );
+            Assert.AreEqual( ":", _lex.NextToken().Name );
+            Assert.AreEqual( ":=", _lex.NextToken().Name );
+            Assert.AreEqual( ":", _lex.NextToken().Name );
+            Assert.AreEqual( ":=", _lex.NextToken().Name );
         }
 
 
@@ -105,7 +107,7 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " 'Hello, Wordld!' " );
 
-            Assert.AreEqual( "'Hello, Wordld!'", _lex.NextLexeme() );
+            Assert.AreEqual( "'Hello, Wordld!'", _lex.NextToken().Name );
         }
 
 
@@ -114,9 +116,9 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "" );
 
-            string word = _lex.NextLexeme();
+            Token word = _lex.NextToken();
 
-            Assert.AreEqual( string.Empty, word );
+            Assert.AreEqual( string.Empty, word.Name );
         }
 
 
@@ -125,9 +127,9 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "  " );
 
-            string word = _lex.NextLexeme();
+            Token word = _lex.NextToken();
 
-            Assert.AreEqual( string.Empty, word );
+            Assert.AreEqual( string.Empty, word.Name );
         }
     }
 }
