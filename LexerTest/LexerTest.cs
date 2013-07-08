@@ -109,7 +109,7 @@ namespace LexerTest
 
             var word = _lex.Next();
 
-            Assert.AreEqual( "", word );
+            Assert.AreEqual( string.Empty, word );
         }
 
         [TestMethod]
@@ -119,7 +119,7 @@ namespace LexerTest
 
             var word = _lex.Next();
 
-            Assert.AreEqual( "", word );
+            Assert.AreEqual( string.Empty, word );
         }
     }
 }
