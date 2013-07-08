@@ -5,27 +5,10 @@ namespace Lexer
 {
     public class Lexer
     {
-        public Stream BaseStream { get; private set; }
-
-        public void LoadTextCode( string code )
-        {
-            BinaryWriter writer = new BinaryWriter( BaseStream );
-            BaseStream.Position = 0;
-            writer.Write( Encoding.ASCII.GetBytes( code ) );
-            BaseStream.Position = 0;
-
-            NextChar();
-        }
-
-        private StringBuilder lexem = new StringBuilder();
-            
-        private void NextChar()
-        {
-            _nextCh = (char) _reader.Read();
-        }
-
+        private readonly StringBuilder _lexem = new StringBuilder();
         private readonly StreamReader _reader;
         private char _nextCh;
+
 
         public Lexer( Stream stream )
         {
@@ -34,17 +17,39 @@ namespace Lexer
             NextChar();
         }
 
+
         public Lexer()
         {
             BaseStream = new MemoryStream();
             _reader = new StreamReader( BaseStream );
         }
 
+
+        public Stream BaseStream { get; private set; }
+
+
+        public void LoadTextCode( string code )
+        {
+            var writer = new BinaryWriter( BaseStream );
+            BaseStream.Position = 0;
+            writer.Write( Encoding.ASCII.GetBytes( code ) );
+            BaseStream.Position = 0;
+
+            NextChar();
+        }
+
+
+        private void NextChar()
+        {
+            _nextCh = (char) _reader.Read();
+        }
+
+
         public string NextLexeme()
         {
             SkipWhitespace();
 
-            lexem.Clear();
+            _lexem.Clear();
 
             if ( IsNumber() )
             {
@@ -75,48 +80,45 @@ namespace Lexer
                 ReadStringConstant();
             }
 
-            return lexem.ToString();
+            return _lexem.ToString();
         }
+
 
         private void SupplementLexeme()
         {
-            lexem.Append( _nextCh );
+            _lexem.Append( _nextCh );
             NextChar();
         }
+
 
         private bool IsEquals( char ch )
         {
             return _nextCh == ch;
         }
 
+
         private void ReadStringConstant()
         {
             SupplementLexeme();
             while ( !IsSingleQuote() )
             {
-               SupplementLexeme();
+                SupplementLexeme();
             }
             SupplementLexeme();
         }
+
 
         private bool IsSingleQuote()
         {
             return _nextCh == '\'';
         }
 
-        private void ReadColonOrAssign()
-        {
-            SupplementLexeme();
-            if ( _nextCh == '=' )
-            {
-                SupplementLexeme();
-            }
-        }
 
         private bool IsColon()
         {
             return _nextCh == ':';
         }
+
 
         private void ReadRelationalOperator()
         {
@@ -127,10 +129,12 @@ namespace Lexer
             }
         }
 
+
         private bool IsRelationalOperator()
         {
-            return  _nextCh == '='   || _nextCh == '>' || _nextCh == '<';
+            return _nextCh == '=' || _nextCh == '>' || _nextCh == '<';
         }
+
 
         private void SkipWhitespace()
         {
@@ -140,15 +144,18 @@ namespace Lexer
             }
         }
 
+
         private void ReadOperation()
         {
             SupplementLexeme();
         }
 
+
         private bool IsMathOperation()
         {
             return _nextCh == '+' || _nextCh == '-' || _nextCh == '*' || _nextCh == '/';
         }
+
 
         private void ReadIdentificator()
         {
@@ -158,18 +165,21 @@ namespace Lexer
             }
         }
 
+
         private bool IsIdentificator()
         {
             return _nextCh == '_' || char.IsLetter( _nextCh );
         }
 
-        private void ReadNumbers(  )
+
+        private void ReadNumbers()
         {
             while ( IsNumber() )
             {
                 SupplementLexeme();
             }
         }
+
 
         private bool IsNumber()
         {
