@@ -40,15 +40,15 @@ namespace Lexer
             _reader = new StreamReader( BaseStream );
         }
 
-        public string Next()
+        public string NextLexeme()
         {
             SkipWhitespace();
 
             lexem.Clear();
 
-            if ( IsIntNumber() )
+            if ( IsNumber() )
             {
-                ReadIntNumber();
+                ReadNumbers();
             }
             else if ( IsIdentificator() )
             {
@@ -64,7 +64,11 @@ namespace Lexer
             }
             else if ( IsColon() )
             {
-                ReadColonOrAssign();
+                SupplementLexeme();
+                if ( IsEquals( '=' ) )
+                {
+                    SupplementLexeme();
+                }
             }
             else if ( IsSingleQuote() )
             {
@@ -78,6 +82,11 @@ namespace Lexer
         {
             lexem.Append( _nextCh );
             NextChar();
+        }
+
+        private bool IsEquals( char ch )
+        {
+            return _nextCh == ch;
         }
 
         private void ReadStringConstant()
@@ -154,15 +163,15 @@ namespace Lexer
             return _nextCh == '_' || char.IsLetter( _nextCh );
         }
 
-        private void ReadIntNumber(  )
+        private void ReadNumbers(  )
         {
-            while ( IsIntNumber() )
+            while ( IsNumber() )
             {
                 SupplementLexeme();
             }
         }
 
-        private bool IsIntNumber()
+        private bool IsNumber()
         {
             return char.IsNumber( _nextCh );
         }

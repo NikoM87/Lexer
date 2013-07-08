@@ -28,7 +28,7 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "\t Program");
 
-            var word = _lex.Next();
+            var word = _lex.NextLexeme();
 
             Assert.AreEqual( "Program",word  );
         }
@@ -38,8 +38,8 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "Program HelloWorld" );
 
-            var word1 = _lex.Next();
-            var word2 = _lex.Next();
+            var word1 = _lex.NextLexeme();
+            var word2 = _lex.NextLexeme();
 
             Assert.AreEqual( "Program", word1 );
             Assert.AreEqual( "HelloWorld", word2 );
@@ -50,7 +50,7 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "__az_AZ09" );
 
-            var word = _lex.Next();
+            var word = _lex.NextLexeme();
 
             Assert.AreEqual( "__az_AZ09", word );
         }
@@ -60,10 +60,10 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " + - * / " );
 
-            Assert.AreEqual( "+", _lex.Next() );
-            Assert.AreEqual( "-", _lex.Next() );
-            Assert.AreEqual( "*", _lex.Next() );
-            Assert.AreEqual( "/", _lex.Next() );
+            Assert.AreEqual( "+", _lex.NextLexeme() );
+            Assert.AreEqual( "-", _lex.NextLexeme() );
+            Assert.AreEqual( "*", _lex.NextLexeme() );
+            Assert.AreEqual( "/", _lex.NextLexeme() );
         }
 
 
@@ -72,12 +72,12 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " = <> > >= < <= " );
 
-            Assert.AreEqual( "=", _lex.Next() );
-            Assert.AreEqual( "<>", _lex.Next() );
-            Assert.AreEqual( ">", _lex.Next() );
-            Assert.AreEqual( ">=", _lex.Next() );
-            Assert.AreEqual( "<", _lex.Next() );
-            Assert.AreEqual( "<=", _lex.Next() );
+            Assert.AreEqual( "=", _lex.NextLexeme() );
+            Assert.AreEqual( "<>", _lex.NextLexeme() );
+            Assert.AreEqual( ">", _lex.NextLexeme() );
+            Assert.AreEqual( ">=", _lex.NextLexeme() );
+            Assert.AreEqual( "<", _lex.NextLexeme() );
+            Assert.AreEqual( "<=", _lex.NextLexeme() );
         }
 
 
@@ -86,10 +86,10 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " : := : :=" );
 
-            Assert.AreEqual( ":", _lex.Next() );
-            Assert.AreEqual( ":=", _lex.Next() );
-            Assert.AreEqual( ":", _lex.Next() );
-            Assert.AreEqual( ":=", _lex.Next() );
+            Assert.AreEqual( ":", _lex.NextLexeme() );
+            Assert.AreEqual( ":=", _lex.NextLexeme() );
+            Assert.AreEqual( ":", _lex.NextLexeme() );
+            Assert.AreEqual( ":=", _lex.NextLexeme() );
         }
 
 
@@ -98,7 +98,7 @@ namespace LexerTest
         {
             _lex.LoadTextCode( " 'Hello, Wordld!' " );
 
-            Assert.AreEqual( "'Hello, Wordld!'", _lex.Next() );
+            Assert.AreEqual( "'Hello, Wordld!'", _lex.NextLexeme() );
         }
 
 
@@ -107,7 +107,7 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "" );
 
-            var word = _lex.Next();
+            var word = _lex.NextLexeme();
 
             Assert.AreEqual( string.Empty, word );
         }
@@ -117,7 +117,7 @@ namespace LexerTest
         {
             _lex.LoadTextCode( "  " );
 
-            var word = _lex.Next();
+            var word = _lex.NextLexeme();
 
             Assert.AreEqual( string.Empty, word );
         }
