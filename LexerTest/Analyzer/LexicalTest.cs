@@ -2,20 +2,22 @@
 using System.Text;
 
 using Lexer;
+using Lexer.Analyzer;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LexerTest
+
+namespace LexerTest.Analyzer
 {
     [TestClass]
-    public class LexerTest
+    public class LexicalTest
     {
-        private readonly Lexer.Lexer _lex;
+        private readonly Lexical _lex;
 
 
-        public LexerTest()
+        public LexicalTest()
         {
-            _lex = new Lexer.Lexer();
+            _lex = new Lexical();
         }
 
 
@@ -23,7 +25,7 @@ namespace LexerTest
         public void TestStreamLoadTextCode()
         {
             Stream stream = new MemoryStream( Encoding.ASCII.GetBytes( "Program" ) );
-            var lex = new Lexer.Lexer( stream );
+            var lex = new Lexical( stream );
 
             Assert.AreEqual( stream, lex.BaseStream );
         }
@@ -36,7 +38,7 @@ namespace LexerTest
 
             Token word = _lex.NextToken();
 
-            Assert.AreEqual( "Program", word.Name);
+            Assert.AreEqual( "Program", word.Name );
         }
 
 
@@ -61,6 +63,7 @@ namespace LexerTest
             Token word = _lex.NextToken();
 
             Assert.AreEqual( "__az_AZ09", word.Name );
+            Assert.AreEqual( TokenType.Identify, word.Type );
         }
 
 
@@ -91,14 +94,38 @@ namespace LexerTest
 
 
         [TestMethod]
-        public void TestColonAndAssign()
+        public void TestColon()
         {
-            _lex.LoadTextCode( " : := : :=" );
+            _lex.LoadTextCode( ":" );
 
-            Assert.AreEqual( ":", _lex.NextToken().Name );
-            Assert.AreEqual( ":=", _lex.NextToken().Name );
-            Assert.AreEqual( ":", _lex.NextToken().Name );
-            Assert.AreEqual( ":=", _lex.NextToken().Name );
+            Token t = _lex.NextToken();
+
+            Assert.AreEqual( ":", t.Name );
+            Assert.AreEqual( TokenType.Colun, t.Type );
+        }
+
+
+        [TestMethod]
+        public void TestSemicolon()
+        {
+            _lex.LoadTextCode( ";" );
+
+            Token t = _lex.NextToken();
+
+            Assert.AreEqual( ";", t.Name );
+            Assert.AreEqual( TokenType.Semicolun, t.Type );
+        }
+
+
+        [TestMethod]
+        public void TestAssign()
+        {
+            _lex.LoadTextCode( ":=" );
+
+            Token t = _lex.NextToken();
+
+            Assert.AreEqual( ":=", t.Name );
+            Assert.AreEqual( TokenType.Assign, t.Type );
         }
 
 

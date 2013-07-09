@@ -44,9 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lexer.cs" />
+    <Compile Include="Analyzer\ILexical.cs" />
+    <Compile Include="Analyzer\Lexical.cs" />
+    <Compile Include="Analyzer\Syntax.cs" />
+    <Compile Include="ParseNode.cs" />
+    <Compile Include="TokenType.cs" />
+    <Compile Include="Tree\Variable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Token.cs" />
+    <Compile Include="Tree\VariableList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

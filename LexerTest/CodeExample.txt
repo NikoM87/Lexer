@@ -1,0 +1,8 @@
+﻿var 
+  a: integer;
+begin 
+  write( 'Введите число: ' );
+  readln( a );
+  a := a * 2;
+  write( a );
+end.
