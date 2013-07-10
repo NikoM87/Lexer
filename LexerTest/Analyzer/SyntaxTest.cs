@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+
+using Lexer;
 using Lexer.Analyzer;
 using Lexer.Tree;
 
@@ -12,12 +15,20 @@ namespace LexerTest.Analyzer
         [TestMethod]
         public void TestVariableList()
         {
-            var lexical = new Lexical();
-            lexical.LoadTextCode( "var " +
-                                  "a: integer;" +
-                                  "b: float;" );
+            IEnumerable<Token> tokens = new List<Token>
+            {
+                TokenFactory.CreateIdentify( "var" ),
+                TokenFactory.CreateIdentify( "a" ),
+                TokenFactory.CreateColun(),
+                TokenFactory.CreateIdentify( "integer" ),
+                TokenFactory.CreateSemicolun(),
+                TokenFactory.CreateIdentify( "b" ),
+                TokenFactory.CreateColun(),
+                TokenFactory.CreateIdentify( "float" ),
+                TokenFactory.CreateSemicolun()
+            };
 
-            var parser = new Syntax( lexical );
+            var parser = new Syntax( tokens );
 
             parser.Parse();
             var variables = (VariableList) parser.ParseTree.Items[0];

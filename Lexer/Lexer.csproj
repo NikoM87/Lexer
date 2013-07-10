@@ -44,10 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analyzer\ILexical.cs" />
     <Compile Include="Analyzer\Lexical.cs" />
     <Compile Include="Analyzer\Syntax.cs" />
     <Compile Include="ParseNode.cs" />
+    <Compile Include="TokenFactory.cs" />
     <Compile Include="TokenType.cs" />
     <Compile Include="Tree\Variable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

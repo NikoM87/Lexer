@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 
 namespace Lexer.Analyzer
 {
-    public class Lexical : ILexical
+    public class Lexical : IEnumerable<Token>
     {
         private readonly StringBuilder _lexem = new StringBuilder();
         private readonly StreamReader _reader;
@@ -27,6 +29,22 @@ namespace Lexer.Analyzer
 
 
         public Stream BaseStream { get; private set; }
+
+
+        public IEnumerator<Token> GetEnumerator()
+        {
+            while( !_reader.EndOfStream )
+            {
+                yield return NextToken();
+            }
+            yield return NextToken();
+        }
+
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
 
         public Token NextToken()

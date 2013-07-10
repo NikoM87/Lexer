@@ -1,4 +1,4 @@
-﻿namespace Lexer.Analyzer
+﻿namespace Lexer
 {
     public enum TokenType
     {

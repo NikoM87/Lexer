@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Lexer.Tree;
 
@@ -7,15 +8,14 @@ namespace Lexer.Analyzer
 {
     public class Syntax
     {
-        private readonly ILexical _lexical;
+        private readonly IEnumerator<Token> _lexical;
 
         private readonly ParseNode _parseTree;
-        private Token _currentToken;
 
 
-        public Syntax( ILexical lexical )
+        public Syntax( IEnumerable<Token> lexical )
         {
-            _lexical = lexical;
+            _lexical = lexical.GetEnumerator();
             _parseTree = new ParseNode();
         }
 
@@ -28,11 +28,11 @@ namespace Lexer.Analyzer
 
         public void Parse()
         {
-            _currentToken = _lexical.NextToken();
+            _lexical.MoveNext();
 
             if ( IsVariableList() )
             {
-                _currentToken = _lexical.NextToken();
+                _lexical.MoveNext();
 
                 ParseVariableList( _parseTree );
                 return;
@@ -44,7 +44,7 @@ namespace Lexer.Analyzer
 
         private bool IsVariableList()
         {
-            return _currentToken.Type == TokenType.Identify && _currentToken.Name.ToLower() == "var";
+            return _lexical.Current.Type == TokenType.Identify && _lexical.Current.Name.ToLower() == "var";
         }
 
 
@@ -52,7 +52,7 @@ namespace Lexer.Analyzer
         {
             var childNode = new VariableList();
 
-            while( _currentToken.Type == TokenType.Identify )
+            while( _lexical.Current != null && _lexical.Current.Type == TokenType.Identify )
             {
                 ParseVariable( childNode );
 
@@ -65,29 +65,22 @@ namespace Lexer.Analyzer
         {
             var var = new Variable();
 
-            if ( _currentToken.Type != TokenType.Identify )
-                throw new Exception( "Ожидается идентификатор" );
+            _lexical.Current.CheckType( TokenType.Identify );
+            var.Name = _lexical.Current.Name;
 
-            var.Name = _currentToken.Name;
+            _lexical.MoveNext();
+            _lexical.Current.CheckType( TokenType.Colun );
 
-            _currentToken = _lexical.NextToken();
-            if ( _currentToken.Type != TokenType.Colun )
-                throw new Exception( "Ожидается ':'" );
-
-            _currentToken = _lexical.NextToken();
-
-            if ( _currentToken.Type != TokenType.Identify )
-                throw new Exception( "Ожидается идентификатор" );
-
-            var.Type = _currentToken.Name;
+            _lexical.MoveNext();
+            _lexical.Current.CheckType( TokenType.Identify );
+            var.Type = _lexical.Current.Name;
 
             node.AddChild( var );
 
-            _currentToken = _lexical.NextToken();
-            if ( _currentToken.Type != TokenType.Semicolun )
-                throw new Exception( "Ожидается ';'" );
+            _lexical.MoveNext();
+            _lexical.Current.CheckType( TokenType.Semicolun );
 
-            _currentToken = _lexical.NextToken();
+            _lexical.MoveNext();
         }
     }
 }

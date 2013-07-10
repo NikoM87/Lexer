@@ -1,4 +1,4 @@
-﻿using Lexer.Analyzer;
+﻿using System;
 
 
 namespace Lexer
@@ -24,6 +24,13 @@ namespace Lexer
         public TokenType Type
         {
             get { return _type; }
+        }
+
+
+        public void CheckType( TokenType type )
+        {
+            if ( _type != type )
+                throw new Exception( "Ожидается " + type );
         }
     }
 }
