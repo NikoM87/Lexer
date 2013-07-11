@@ -45,5 +45,25 @@ namespace LexerTest.Analyzer
             Assert.AreEqual( "b", var2.Name );
             Assert.AreEqual( "float", var2.Type );
         }
+
+
+        [TestMethod]
+        public void TestStatementSequence()
+        {
+            IEnumerable<Token> tokens = new List<Token>
+            {
+                TokenFactory.CreateIdentify( "begin" ),
+                TokenFactory.CreateIdentify( "WriteLn" ),
+                TokenFactory.CreateIdentify( "end" )
+            };
+
+            var parser = new Syntax( tokens );
+
+            parser.Parse();
+            var statmentSequence = (StatementSequence) parser.ParseTree.Items[0];
+
+            Assert.AreEqual( 1, statmentSequence.Items.Count );
+            Assert.AreEqual( typeof (Statement), statmentSequence.Items[0].GetType() );
+        }
     }
 }

@@ -30,11 +30,15 @@ namespace Lexer.Analyzer
         {
             _lexical.MoveNext();
 
-            if ( IsVariableList() )
+            if ( _lexical.Current.IsNameIdentify( "var" ) )
             {
-                _lexical.MoveNext();
-
                 ParseVariableList( _parseTree );
+                return;
+            }
+
+            if ( _lexical.Current.IsNameIdentify( "begin" ) )
+            {
+                ParseBlock( _parseTree );
                 return;
             }
 
@@ -42,21 +46,35 @@ namespace Lexer.Analyzer
         }
 
 
-        private bool IsVariableList()
+        private void ParseBlock( ParseNode node )
         {
-            return _lexical.Current.Type == TokenType.Identify && _lexical.Current.Name.ToLower() == "var";
+            _lexical.Current.CheckNameIdentify( "begin" );
+            _lexical.MoveNext();
+
+            var statementSequence = new StatementSequence();
+            while( _lexical.Current != null && !_lexical.Current.IsNameIdentify( "end" ) )
+            {
+                statementSequence.AddChild( new Statement() );
+                _lexical.MoveNext();
+            }
+            node.AddChild( statementSequence );
         }
 
 
         private void ParseVariableList( ParseNode node )
         {
-            var childNode = new VariableList();
+            _lexical.Current.CheckNameIdentify( "var" );
 
-            while( _lexical.Current != null && _lexical.Current.Type == TokenType.Identify )
+            _lexical.MoveNext();
+
+            var variableList = new VariableList();
+
+            while( _lexical.Current != null && _lexical.Current.IsType( TokenType.Identify ) )
             {
-                ParseVariable( childNode );
+                ParseVariable( variableList );
+                _lexical.MoveNext();
 
-                node.AddChild( childNode );
+                node.AddChild( variableList );
             }
         }
 
@@ -66,6 +84,7 @@ namespace Lexer.Analyzer
             var var = new Variable();
 
             _lexical.Current.CheckType( TokenType.Identify );
+
             var.Name = _lexical.Current.Name;
 
             _lexical.MoveNext();
@@ -73,14 +92,13 @@ namespace Lexer.Analyzer
 
             _lexical.MoveNext();
             _lexical.Current.CheckType( TokenType.Identify );
+
             var.Type = _lexical.Current.Name;
 
             node.AddChild( var );
 
             _lexical.MoveNext();
             _lexical.Current.CheckType( TokenType.Semicolun );
-
-            _lexical.MoveNext();
         }
     }
 }

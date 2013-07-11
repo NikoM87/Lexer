@@ -45,8 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzer\Lexical.cs" />
+    <Compile Include="Tree\Statement.cs" />
+    <Compile Include="Tree\StatementSequence.cs" />
     <Compile Include="Analyzer\Syntax.cs" />
-    <Compile Include="ParseNode.cs" />
+    <Compile Include="Tree\ParseNode.cs" />
     <Compile Include="TokenFactory.cs" />
     <Compile Include="TokenType.cs" />
     <Compile Include="Tree\Variable.cs" />

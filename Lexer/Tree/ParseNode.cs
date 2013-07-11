@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 
-namespace Lexer
+namespace Lexer.Tree
 {
     public class ParseNode
     {
