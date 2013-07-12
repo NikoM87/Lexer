@@ -43,7 +43,8 @@ namespace Lexer
 
         public bool IsNameIdentify( string name )
         {
-            return Type == TokenType.Identify && String.Equals( Name, name, StringComparison.CurrentCultureIgnoreCase );
+            return _type == TokenType.Identify
+                   && String.Equals( _name, name, StringComparison.CurrentCultureIgnoreCase );
         }
 
 

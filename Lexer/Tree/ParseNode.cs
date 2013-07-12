@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Lexer.Tree
 {
-    public class ParseNode
+    public abstract class ParseNode
     {
         public List<ParseNode> Items;
 
 
-        public ParseNode()
+        protected ParseNode()
         {
             Items = new List<ParseNode>();
         }
@@ -18,5 +18,8 @@ namespace Lexer.Tree
         {
             Items.Add( node );
         }
+
+
+        public abstract void Parse( IEnumerator<Token> tokens );
     }
 }

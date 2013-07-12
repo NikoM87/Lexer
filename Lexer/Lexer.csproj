@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tree\Block.cs" />
     <Compile Include="Analyzer\Lexical.cs" />
     <Compile Include="Tree\Statement.cs" />
     <Compile Include="Tree\StatementSequence.cs" />

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 
 using Lexer;
-using Lexer.Analyzer;
 using Lexer.Tree;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,13 +26,11 @@ namespace LexerTest.Analyzer
                 TokenFactory.CreateIdentify( "float" ),
                 TokenFactory.CreateSemicolun()
             };
+            IEnumerator<Token> list = tokens.GetEnumerator();
+            list.MoveNext();
 
-            var parser = new Syntax( tokens );
-
-            parser.Parse();
-            var variables = (VariableList) parser.ParseTree.Items[0];
-
-            Assert.AreEqual( 2, variables.Items.Count );
+            var variables = new VariableList();
+            variables.Parse( list );
 
             var var1 = (Variable) variables.Items[0];
 
@@ -56,14 +53,15 @@ namespace LexerTest.Analyzer
                 TokenFactory.CreateIdentify( "WriteLn" ),
                 TokenFactory.CreateIdentify( "end" )
             };
+            IEnumerator<Token> list = tokens.GetEnumerator();
+            list.MoveNext();
 
-            var parser = new Syntax( tokens );
+            var statementSequence = new StatementSequence();
 
-            parser.Parse();
-            var statmentSequence = (StatementSequence) parser.ParseTree.Items[0];
+            statementSequence.Parse( list );
 
-            Assert.AreEqual( 1, statmentSequence.Items.Count );
-            Assert.AreEqual( typeof (Statement), statmentSequence.Items[0].GetType() );
+            Assert.AreEqual( 1, statementSequence.Items.Count );
+            Assert.AreEqual( typeof ( Statement ), statementSequence.Items[0].GetType() );
         }
     }
 }
