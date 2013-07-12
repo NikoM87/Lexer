@@ -17,7 +17,9 @@ namespace LexerTest.Analyzer
 
         public LexicalTest()
         {
-            _lex = new Lexical();
+            Stream stream = new MemoryStream();
+            var reader = new StreamReader( stream );
+            _lex = new Lexical( reader );
         }
 
 
@@ -25,9 +27,12 @@ namespace LexerTest.Analyzer
         public void TestStreamLoadTextCode()
         {
             Stream stream = new MemoryStream( Encoding.ASCII.GetBytes( "Program" ) );
-            var lex = new Lexical( stream );
+            var reader = new StreamReader( stream );
 
-            Assert.AreEqual( stream, lex.BaseStream );
+            var lex = new Lexical( reader );
+            Token word = lex.NextToken();
+
+            Assert.AreEqual( "Program", word.Name );
         }
 
 

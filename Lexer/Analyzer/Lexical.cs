@@ -13,22 +13,11 @@ namespace Lexer.Analyzer
         private int _nextCh;
 
 
-        public Lexical( Stream stream )
+        public Lexical( StreamReader reader )
         {
-            BaseStream = stream;
-            _reader = new StreamReader( BaseStream );
+            _reader = reader;
             NextChar();
         }
-
-
-        public Lexical()
-        {
-            BaseStream = new MemoryStream();
-            _reader = new StreamReader( BaseStream );
-        }
-
-
-        public Stream BaseStream { get; private set; }
 
 
         public IEnumerator<Token> GetEnumerator()
@@ -115,10 +104,10 @@ namespace Lexer.Analyzer
 
         public void LoadTextCode( string code )
         {
-            var writer = new BinaryWriter( BaseStream );
-            BaseStream.Position = 0;
+            var writer = new BinaryWriter( _reader.BaseStream );
+            _reader.BaseStream.Position = 0;
             writer.Write( Encoding.ASCII.GetBytes( code ) );
-            BaseStream.Position = 0;
+            _reader.BaseStream.Position = 0;
 
             NextChar();
         }
